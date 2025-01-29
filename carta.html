@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta para Jennyffer</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #ffe6f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            color: #d63384;
+        }
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 900px;
+            margin: auto;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slideshow-container img {
+            max-height: 900px;
+            max-width: 100%;
+            object-fit: contain;
+            position: absolute;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            z-index: 1;
+        }
+        .slideshow-container img.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .slideshow-text {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            transform: translateX(-50%);
+            font-size: 28px;
+            font-weight: bold;
+            color: #d63384;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: 2;
+        }
+        .slideshow-text.active {
+            opacity: 1;
+        }
+        .hidden {
+            display: none;
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        .message {
+            font-size: 32px;
+            color: #d63384;
+            font-weight: bold;
+            display: none;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 0, 150, 0.7);
+            animation: confetti-fall 3s ease-out infinite;
+        }
+        @keyframes confetti-fall {
+            from { transform: translateY(-100vh) rotate(0deg); }
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+        .buttons button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        #yes1 { background-color: #ff4081; }
+        #yes2 { background-color: #ff79a1; }
+        #yes3 { background-color: #ff1493; }
+    </style>
+</head>
+<body>
+    <div class="slideshow-container" id="slideshow">
+        <div class="slideshow-text active">Eres la mujer más maravillosa en el mundo 🌎💕</div>
+        <img class="fade active" src="jenny1.jpeg">
+        <div class="slideshow-text">Cada momento contigo es especial 💖</div>
+        <img class="fade" src="starbucks1.jpeg">
+        <div class="slideshow-text">Mi felicidad comienza y termina a tu lado ❤️</div>
+        <img class="fade" src="jenny2.jpeg">
+    </div>
+    <div id="proposal" class="hidden">
+        <h1>Hola mi amor 💖</h1>
+        <p>Desde que te conocí, supe que eras especial para mí. Me encantaría compartir momentos increíbles contigo. Así que... </p>
+        <h2>¿Quieres ser mi novia? 😊</h2>
+        <div class="buttons">
+            <button id="yes1" onclick="showLove('No hay nada que me haga más feliz que estar contigo 💖✨')">Sí 😍</button>
+            <button id="yes2" onclick="showLove('Desde el primer momento supe que eras mi persona especial 💕🌟')">¡Claro que sí! 🥰</button>
+            <button id="yes3" onclick="showLove('Siempre soñé con este momento, hagámoslo realidad 💖')">No (Me quiero casar contigo🌟) </button>
+        </div>
+    </div>
+    <div id="final-message" class="message hidden"></div>
+    
+    <script>
+        let images = document.querySelectorAll('.slideshow-container img');
+        let texts = document.querySelectorAll('.slideshow-text');
+        let index = 0;
+
+        function cycleImages() {
+            images.forEach(img => img.classList.remove('active'));
+            texts.forEach(text => text.classList.remove('active'));
+            
+            images[index].classList.add('active');
+            texts[index].classList.add('active');
+            
+            index++;
+            if (index >= images.length) {
+                setTimeout(() => {
+                    document.getElementById('slideshow').classList.add('fade-out');
+                    setTimeout(() => {
+                        document.getElementById('slideshow').style.display = 'none';
+                        document.getElementById('proposal').classList.remove('hidden');
+                    }, 2000);
+                }, 2000);
+            } else {
+                setTimeout(cycleImages, 3000);
+            }
+        }
+        setTimeout(cycleImages, 2500);
+
+        function showLove(message) {
+            document.getElementById('proposal').style.display = 'none';
+            let finalMessage = document.getElementById('final-message');
+            finalMessage.textContent = message;
+            finalMessage.style.display = 'block';
+            generateConfetti();
+        }
+
+        function generateConfetti() {
+            for (let i = 0; i < 100; i++) {
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = Math.random() * -100 + 'px';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+    </script>
+</body>
+</html>
